@@ -31,6 +31,9 @@ LIB_LOBJS = $(LIB_SRCS:.c=.lo)
 LIB_NAME = libmseed
 LIB_A = $(LIB_NAME).a
 
+LIB_WASM = $(LIB_NAME).wasm
+LIB_WASM_EXPORT_FUNCTIONS = $(shell tail -n +3 $(LIB_NAME).def | sed 's/^[[:space:]]*//' | sed 's/.*/"_&"/' | sed 's/_"$$/"/' | paste -sd,)
+
 OS := $(shell uname -s)
 
 # Build dynamic (.dylib) on macOS/Darwin, otherwise shared (.so)
@@ -82,7 +85,7 @@ example: static FORCE
 	@$(MAKE) -C example
 
 clean:
-	@$(RM) $(LIB_OBJS) $(LIB_LOBJS) $(LIB_A) $(LIB_SO) $(LIB_SO_MAJOR) $(LIB_SO_BASE)
+	@$(RM) $(LIB_OBJS) $(LIB_LOBJS) $(LIB_A) $(LIB_SO) $(LIB_SO_MAJOR) $(LIB_SO_BASE) $(LIB_WASM)
 	@$(MAKE) -C test clean
 	@$(MAKE) -C example clean
 	@echo "All clean."
@@ -117,3 +120,9 @@ print-%:
 	@echo '$*=$($*)'
 
 FORCE:
+
+# Build for WebAssembly target
+wasm:
+	@command -v emcc >/dev/null 2>&1 || { echo "Error: emcc not found in PATH. Please install Emscripten."; exit 1; }
+	emcc $(LIB_SRCS) -O3 -o $(LIB_WASM) \
+	  -s WASM=1 -s EXPORTED_FUNCTIONS='["_malloc", "_free", $(LIB_WASM_EXPORT_FUNCTIONS)]' -Wl,--no-entry

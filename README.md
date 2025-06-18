@@ -10,6 +10,12 @@ multiple records.
 The library should work in Unix-like, Windows and potentially other
 environments.
 
+## About This Fork
+
+This is a fork of [EarthScope/libmseed](https://github.com/EarthScope/libmseed), modified to compile the library as WebAssembly (`.wasm`).
+
+All original copyrights are retained. This fork is licensed under the Apache License 2.0, the same as the upstream.
+
 ## Documentation
 
 The [Documentation](https://earthscope.github.io/libmseed) provides an

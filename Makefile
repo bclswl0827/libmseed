@@ -124,5 +124,5 @@ FORCE:
 # Build for WebAssembly target
 wasm:
 	@command -v emcc >/dev/null 2>&1 || { echo "Error: emcc not found in PATH. Please install Emscripten."; exit 1; }
-	emcc $(LIB_SRCS) -O3 -o $(LIB_WASM) \
+	emcc $(LIB_SRCS) -O3 -g0 -o $(LIB_WASM) \
 	  -s WASM=1 -s EXPORTED_FUNCTIONS='["_malloc", "_free", $(LIB_WASM_EXPORT_FUNCTIONS)]' -Wl,--no-entry

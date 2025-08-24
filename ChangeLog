@@ -1,3 +1,28 @@
+2025.234:
+	- Add ms_nstime2timestr_n() with string size limit, deprecate ms_nstime2timestr().
+	- With ms_nstime2timestr_n() print "ERROR" for NSTERROR and "UNSET" for NSTUNSET.
+	- Avoid fatal errors when v2 record blockettes contain invalid time stamps.
+  When SEED "btime" values are encountered they are now set to NSTERROR and
+	serialized in extra headers as "ERROR".
+	- Limit float point values in extra headers to single precision to avoid
+  unrealistically high precision values in the output
+	- Update yyjson to v0.12.0
+
+2025.227:
+	- Properly round negative values when converting floats to integers
+	in mstl3_convertsamples().
+
+2025.207: 3.1.6
+	- Properly propagate sub-fractional microseconds to v2 blockette 1001
+	when packing more than one record.
+	- Round sub-fractional and sub-microsecond times for v2 record fields
+	to retain accuracy.
+	- Ensure microsecond offsets in v2 record fields are -50 to +49, which
+	matches previous major library version behavior and SEED recommendation.
+	- Add msr3_repack_mseed2() to repack v2 records efficiently.
+	- Add -s and -R options to example/lm_pack.c.
+	- Fix some pedantic compiler warnings in msio.c.
+
 2025.114: 3.1.5
 	- Add new functions to libmseed.map and libmseed.def for public use.
 
